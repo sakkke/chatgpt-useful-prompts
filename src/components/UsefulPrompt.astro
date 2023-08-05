@@ -1,0 +1,42 @@
+---
+import { Icon } from 'astro-icon';
+
+interface Props {
+	text: string;
+}
+
+const { text } = Astro.props;
+---
+
+<useful-prompt>
+    <div class="bg-slate-950 p-2 relative rounded-lg shadow-2xl">
+        <div
+            class="absolute bg-slate-900 border border-slate-700 copy duration-100 grid h-7 hover:bg-slate-800 hover:border-slate-600 place-items-center right-2 rounded-lg shadow top-2 w-7"
+        >
+            <Icon class="h-[16px] text-slate-50" name="octicon:copy-16" />
+        </div>
+        <div class="text text-slate-50">{text}</div>
+    </div>
+</useful-prompt>
+
+<script>
+    class UsefulPrompt extends HTMLElement {
+        constructor() {
+            super();
+
+            const copy = this.querySelector('.copy')!;
+
+            copy.addEventListener('click', async () => {
+                await this.copyText();
+            });
+        }
+
+        async copyText() {
+            const text = this.querySelector('.text')!;
+            const textContent = text.textContent!;
+            await navigator.clipboard.writeText(textContent);
+        }
+    }
+
+    customElements.define('useful-prompt', UsefulPrompt);
+</script>
